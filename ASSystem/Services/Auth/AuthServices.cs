@@ -1,7 +1,23 @@
-﻿namespace ASSystem.Services.Auth
+﻿using ASSystem.Dtos;
+using ASSystem.Dtos.Admin;
+using ASSystem.Dtos.User;
+using ASSystem.Exceptions;
+using ASSystem.Repository.Auth;
+using AutoMapper;
+using System.Net;
+
+namespace ASSystem.Services.Auth
 {
     public class AuthServices : IAuthServies
     {
+        private readonly AuthRepository _authRepository;
+        private readonly IMapper _mapper;
+        public AuthServices(AuthRepository authRepository, IMapper mapper)
+        {
+            _authRepository = authRepository;
+            _mapper = mapper;
+        }
+
         public string GenerateAccessToken()
         {
             throw new NotImplementedException();
@@ -17,17 +33,18 @@
             throw new NotImplementedException();
         }
 
-        public void Login(string username, string password)
+        public async Task<ApiResponse<UserProfileDto>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+           var user = await _authRepository.Login(username, password);
+            if (user == null)
+            {
+                throw new MyException((int)HttpStatusCode.NotFound, $"Username or password is incorrect");
+            }
+            Console.WriteLine("Login successful");
+            return new ApiResponse<UserProfileDto> { Success = true, Message = "Login successful", Data = _mapper.Map<UserProfileDto>(user)};
         }
 
-        public void Logout()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register(string username, string password)
+        public Task<ApiResponse<UserProfileDto>> Logout()
         {
             throw new NotImplementedException();
         }

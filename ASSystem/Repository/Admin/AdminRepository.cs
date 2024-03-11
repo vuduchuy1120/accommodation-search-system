@@ -16,5 +16,10 @@ namespace ASSystem.Repository.Admin
         {
             return await _context.Accounts.ToListAsync();
         }
+
+        public async Task<List<Role>> getUserRole()
+        {
+            return await _context.Roles.Where(r => r.RoleId != 1).ToListAsync();
+        }
     }
 }

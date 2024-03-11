@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DemoJWT.Migrations
+namespace ASSystem.Migrations
 {
     [DbContext(typeof(AccommodationSearchSystemContext))]
     partial class AccommodationSearchSystemContextModelSnapshot : ModelSnapshot
@@ -17,12 +17,12 @@ namespace DemoJWT.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.26")
+                .HasAnnotation("ProductVersion", "6.0.27")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DemoJWT.Models.Account", b =>
+            modelBuilder.Entity("ASSystem.Models.Account", b =>
                 {
                     b.Property<int>("AccountId")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,6 @@ namespace DemoJWT.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -67,7 +66,6 @@ namespace DemoJWT.Migrations
                         .HasColumnName("RoleID");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
@@ -77,12 +75,13 @@ namespace DemoJWT.Migrations
                     b.HasIndex("RoleId");
 
                     b.HasIndex(new[] { "Username", "Phone", "Email" }, "IX_Account")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL AND [Phone] IS NOT NULL");
 
                     b.ToTable("Account", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Convenient", b =>
+            modelBuilder.Entity("ASSystem.Models.Convenient", b =>
                 {
                     b.Property<int>("ConvenientId")
                         .ValueGeneratedOnAdd()
@@ -104,7 +103,7 @@ namespace DemoJWT.Migrations
                     b.ToTable("Convenient", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Motel", b =>
+            modelBuilder.Entity("ASSystem.Models.Motel", b =>
                 {
                     b.Property<int>("MotelId")
                         .ValueGeneratedOnAdd()
@@ -121,15 +120,7 @@ namespace DemoJWT.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("City")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<string>("Contact")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Country")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -138,23 +129,32 @@ namespace DemoJWT.Migrations
                         .HasColumnName("deleteAt");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
 
                     b.Property<string>("District")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<decimal?>("MaxPrice")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("money");
 
-                    b.Property<decimal?>("MinPrice")
-                        .HasColumnType("money");
+                    b.Property<string>("Province")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int?>("QuantityEmptyRooms")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Tittle")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Ward")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -163,7 +163,7 @@ namespace DemoJWT.Migrations
                     b.ToTable("Motel", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Payment", b =>
+            modelBuilder.Entity("ASSystem.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
                         .HasColumnType("int")
@@ -191,7 +191,7 @@ namespace DemoJWT.Migrations
                     b.ToTable("Payment", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Role", b =>
+            modelBuilder.Entity("ASSystem.Models.Role", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -209,44 +209,7 @@ namespace DemoJWT.Migrations
                     b.ToTable("Role", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Room", b =>
-                {
-                    b.Property<int>("RoomId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("RoomID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"), 1L, 1);
-
-                    b.Property<string>("Acreage")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("DeleteAt")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("MotelId")
-                        .HasColumnType("int")
-                        .HasColumnName("MotelID");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("money");
-
-                    b.Property<int?>("Quanlity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UnitPrice")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("RoomId");
-
-                    b.HasIndex("MotelId");
-
-                    b.ToTable("Room", (string)null);
-                });
-
-            modelBuilder.Entity("DemoJWT.Models.RoomImage", b =>
+            modelBuilder.Entity("ASSystem.Models.RoomImage", b =>
                 {
                     b.Property<int>("RoomImageId")
                         .HasColumnType("int")
@@ -257,54 +220,54 @@ namespace DemoJWT.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("imageDetail");
 
+                    b.Property<int>("MotelId")
+                        .HasColumnType("int")
+                        .HasColumnName("MotelID");
+
                     b.Property<string>("PathImageDetail")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("pathImageDetail");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int")
-                        .HasColumnName("roomID");
-
                     b.HasKey("RoomImageId");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("MotelId");
 
                     b.ToTable("RoomImage", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Vote", b =>
+            modelBuilder.Entity("ASSystem.Models.Vote", b =>
                 {
                     b.Property<int>("AccountId")
                         .HasColumnType("int")
                         .HasColumnName("AccountID");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int>("MotelId")
                         .HasColumnType("int")
-                        .HasColumnName("RoomID");
+                        .HasColumnName("MotelID");
 
                     b.Property<string>("ReviewStar")
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
 
-                    b.HasKey("AccountId", "RoomId");
+                    b.HasKey("AccountId", "MotelId");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("MotelId");
 
                     b.ToTable("Vote", (string)null);
                 });
 
             modelBuilder.Entity("Facility", b =>
                 {
-                    b.Property<int>("RoomId")
+                    b.Property<int>("MotelId")
                         .HasColumnType("int")
-                        .HasColumnName("RoomID");
+                        .HasColumnName("MotelID");
 
                     b.Property<int>("Covenient")
                         .HasColumnType("int");
 
-                    b.HasKey("RoomId", "Covenient")
+                    b.HasKey("MotelId", "Covenient")
                         .HasName("PK_Facility_1");
 
                     b.HasIndex("Covenient");
@@ -312,9 +275,9 @@ namespace DemoJWT.Migrations
                     b.ToTable("Facility", (string)null);
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Account", b =>
+            modelBuilder.Entity("ASSystem.Models.Account", b =>
                 {
-                    b.HasOne("DemoJWT.Models.Role", "Role")
+                    b.HasOne("ASSystem.Models.Role", "Role")
                         .WithMany("Accounts")
                         .HasForeignKey("RoleId")
                         .IsRequired()
@@ -323,9 +286,9 @@ namespace DemoJWT.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Payment", b =>
+            modelBuilder.Entity("ASSystem.Models.Payment", b =>
                 {
-                    b.HasOne("DemoJWT.Models.Account", "Account")
+                    b.HasOne("ASSystem.Models.Account", "Account")
                         .WithMany("Payments")
                         .HasForeignKey("AccountId")
                         .HasConstraintName("FK_Payment_Account");
@@ -333,83 +296,68 @@ namespace DemoJWT.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Room", b =>
+            modelBuilder.Entity("ASSystem.Models.RoomImage", b =>
                 {
-                    b.HasOne("DemoJWT.Models.Motel", "Motel")
-                        .WithMany("Rooms")
+                    b.HasOne("ASSystem.Models.Motel", "Motel")
+                        .WithMany("RoomImages")
                         .HasForeignKey("MotelId")
-                        .HasConstraintName("FK_Room_Motel");
+                        .IsRequired()
+                        .HasConstraintName("FK_RoomImage_Motel");
 
                     b.Navigation("Motel");
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.RoomImage", b =>
+            modelBuilder.Entity("ASSystem.Models.Vote", b =>
                 {
-                    b.HasOne("DemoJWT.Models.Room", "Room")
-                        .WithMany("RoomImages")
-                        .HasForeignKey("RoomId")
-                        .IsRequired()
-                        .HasConstraintName("FK_RoomImage_Room");
-
-                    b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("DemoJWT.Models.Vote", b =>
-                {
-                    b.HasOne("DemoJWT.Models.Account", "Account")
+                    b.HasOne("ASSystem.Models.Account", "Account")
                         .WithMany("Votes")
                         .HasForeignKey("AccountId")
                         .IsRequired()
                         .HasConstraintName("FK_Vote_Account");
 
-                    b.HasOne("DemoJWT.Models.Room", "Room")
+                    b.HasOne("ASSystem.Models.Motel", "Motel")
                         .WithMany("Votes")
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("MotelId")
                         .IsRequired()
-                        .HasConstraintName("FK_Vote_Room");
+                        .HasConstraintName("FK_Vote_Motel");
 
                     b.Navigation("Account");
 
-                    b.Navigation("Room");
+                    b.Navigation("Motel");
                 });
 
             modelBuilder.Entity("Facility", b =>
                 {
-                    b.HasOne("DemoJWT.Models.Convenient", null)
+                    b.HasOne("ASSystem.Models.Convenient", null)
                         .WithMany()
                         .HasForeignKey("Covenient")
                         .IsRequired()
                         .HasConstraintName("FK_Facility_Convenient");
 
-                    b.HasOne("DemoJWT.Models.Room", null)
+                    b.HasOne("ASSystem.Models.Motel", null)
                         .WithMany()
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("MotelId")
                         .IsRequired()
-                        .HasConstraintName("FK_Facility_Room");
+                        .HasConstraintName("FK_Facility_Motel");
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Account", b =>
+            modelBuilder.Entity("ASSystem.Models.Account", b =>
                 {
                     b.Navigation("Payments");
 
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("DemoJWT.Models.Motel", b =>
-                {
-                    b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("DemoJWT.Models.Role", b =>
-                {
-                    b.Navigation("Accounts");
-                });
-
-            modelBuilder.Entity("DemoJWT.Models.Room", b =>
+            modelBuilder.Entity("ASSystem.Models.Motel", b =>
                 {
                     b.Navigation("RoomImages");
 
                     b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("ASSystem.Models.Role", b =>
+                {
+                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

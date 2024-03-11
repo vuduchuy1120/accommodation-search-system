@@ -1,11 +1,13 @@
-﻿namespace ASSystem.Services.Auth
+﻿using ASSystem.Dtos;
+using ASSystem.Dtos.Admin;
+
+namespace ASSystem.Services.Auth
 {
     public interface IAuthServies
     {
-        public void Login(string username, string password);
-        public void Logout();
+        public Task<ApiResponse<UserProfileDto>> Login(string username, string password);
+        public Task<ApiResponse<UserProfileDto>> Logout();
 
-        public void Register(string username, string password);
 
         // genarate token
         public string GenerateJSONWebToken();

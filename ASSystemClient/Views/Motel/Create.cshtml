@@ -1,0 +1,224 @@
+﻿@using ASSystemClient.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Create Motel</h1>
+
+<hr />
+<form method="post">
+    <input type="text" class="form-control" name="accountId" id="accountId" hidden>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="title" class="form-label">Title</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="title" id="title" placeholder="Title">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="description" class="form-label">Description</label>
+                <textarea style="border: 1px solid #dee2e6;" class="form-control" name="description" id="description" placeholder="Description"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="address" class="form-label">Address</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="address" id="address" placeholder="Address">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="price" class="form-label">Price</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="price" id="price" placeholder="Price">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="quantityEmptyRooms" class="form-label">QuantityEmptyRooms</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="quantityEmptyRooms" id="quantityEmptyRooms" placeholder="QuantityEmptyRooms">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="contact" class="form-label">Contact</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="contact" id="contact" placeholder="Contact">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="province" class="form-label">province</label>
+                <select class="form-control" id="province" name="province">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="district" class="form-label">district</label>
+                <select class="form-control" id="district" name="district">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="ward" class="form-label">ward</label>
+                <select class="form-control" id="ward" name="ward">
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="col">
+        <div class="mb-1">
+            <label for="images" class="form-label">Images</label>
+            <input style="border: 1px solid #dee2e6;" type="file" class="form-control" name="images" id="images" multiple>
+        </div>
+    </div>
+
+    <button type="submit" onclick="CreateMotel()">Submit</button>
+
+</form>
+
+<script>
+    //fetch
+    // Fetch provinces
+    fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://vnprovinces.pythonanywhere.com/api/provinces/?limit=100', {
+        mode: 'no-cors'
+    }))
+        .then(response => response.json())
+        .then(data => {
+
+            const provinces = JSON.parse(data.contents).results; // Extract provinces from the response
+
+            // Populate province select element
+            var provinceSelect = document.getElementById("province");
+            provinces.forEach(province => {
+                var option = document.createElement("option");
+                option.text = province.name;
+                option.value = province.id;
+                provinceSelect.appendChild(option);
+            });
+
+            // Add event listener to province select element
+            provinceSelect.addEventListener('change', function () {
+                var selectedProvinceId = this.value;
+
+                // Fetch districts based on the selected province
+                fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://vnprovinces.pythonanywhere.com/api/provinces/' + selectedProvinceId, {
+                    mode: 'no-cors'
+                }))
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("fetch district");
+                        console.log(data);
+                        const districts = JSON.parse(data.contents).districts; // Extract districts from the response
+                        console.log(districts);
+                        // Populate district select element
+                        var districtSelect = document.getElementById("district");
+                        districtSelect.innerHTML = ""; // Clear existing options
+                        districts.forEach(district => {
+                            var option = document.createElement("option");
+                            option.text = district.name;
+                            option.value = district.id;
+                            districtSelect.appendChild(option);
+                        });
+                        districtSelect.addEventListener('change', function () {
+                            var selectedDistrictId = this.value;
+                            console.log(selectedDistrictId);
+                            // Fetch wards based on the selected province and district
+                            fetch(`https://vnprovinces.pythonanywhere.com/api/wards/?province_id=${selectedProvinceId}&district_id=${selectedDistrictId}&limit=100`, {
+                                mode: 'cors' // Ensure CORS mode is set to 'cors'
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log("fetch ward");
+                                    console.log(data);
+                                    const wards = data.results; // Extract wards from the response
+
+                                    // Populate ward select element
+                                    var wardSelect = document.getElementById("ward");
+                                    wardSelect.innerHTML = ""; // Clear existing options
+                                    wards.forEach(ward => {
+                                        var option = document.createElement("option");
+                                        option.text = ward.name;
+                                        option.value = ward.id;
+                                        wardSelect.appendChild(option);
+                                    });
+                                })
+                                .catch(error => console.error(error));
+                        });
+                    })
+                    .catch(error => console.error(error));
+            });
+        })
+        .catch(error => console.error(error));
+
+    const CreateMotel = () => {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+        var address = document.getElementById("address").value;
+        var price = document.getElementById("price").value;
+        var quantityEmptyRooms = document.getElementById("quantityEmptyRooms").value;
+        var contact = document.getElementById("contact").value;
+        var province = document.getElementById("province").value;
+        var district = document.getElementById("district").value;
+        var ward = document.getElementById("ward").value;
+        var images = document.getElementById("images").files;
+        // var accountId = document.getElementById("accountId").value;
+        var accountId = 4;
+        var formData = new FormData();
+        formData.append("motelJson", JSON.stringify({
+            title: title,
+            description: description,
+            address: address,
+            price: price,
+            quantityEmptyRooms: quantityEmptyRooms,
+            contact: contact,
+            province: province,
+            district: district,
+            ward: ward,
+            accountId: accountId
+        }));
+        for (var i = 0; i < images.length; i++) {
+            formData.append("images", images[i]);
+        }
+        fetch('https://localhost:7280/api/Motel', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // You might want to handle success here, maybe redirect to a success page or show a success message
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                // You might want to display an error message to the user
+            });
+    }
+
+</script>
+
+

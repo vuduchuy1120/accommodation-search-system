@@ -9,17 +9,36 @@ namespace ASSystem.Models
     {
         public AutoMapperProfile()
         {
-            CreateMap<Room, RoomResponseTest>();
             CreateMap<Account, UserRegisterDto>();
             CreateMap<UserRegisterDto, Account>();
+
             CreateMap<UserUpdateDto, Account>();
             CreateMap<Account, UserUpdateDto>();
+
             CreateMap<UserChangePasswordDto, Account>();
             CreateMap<Account, UserChangePasswordDto>();
+
             CreateMap<Account, UserProfileDto>();
             CreateMap<UserProfileDto, Account>();
+
             CreateMap<Account, UserDto>();
             CreateMap<UserDto, Account>();
+
+            CreateMap<Role,RoleDto>();
+            CreateMap<RoleDto,Role>();
+
+            CreateMap<RoomImage, RoomImageDto>();   
+            CreateMap<RoomImageDto, RoomImage>();
+
+            CreateMap<Motel, MotelDto>();
+            CreateMap<MotelDto, Motel>();
+
+            CreateMap<MotelwithImagesDto, Motel>();
+            CreateMap<Motel, MotelwithImagesDto>();
+
+
+
+
         }
     }
 }

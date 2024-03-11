@@ -18,7 +18,7 @@ namespace ASSystem.Services.User
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse> ChangePassword(string email, UserChangePasswordDto userChangePasswordDto)
+        public async Task<ApiResponse<UserChangePasswordDto>> ChangePassword(string email, UserChangePasswordDto userChangePasswordDto)
         {
             var user = await _userRepository.GetUserByEmail(email);
             if (user == null)
@@ -31,63 +31,59 @@ namespace ASSystem.Services.User
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Change password failed.");
             }
-            return new ApiResponse { Success = true, Message = "Change password successfully.", Data = _mapper.Map<UserChangePasswordDto>(user) };
+            return new ApiResponse<UserChangePasswordDto> { Success = true, Message = "Change password successfully.", Data = _mapper.Map<UserChangePasswordDto>(user) };
 
         }
 
-        public async Task<ApiResponse> GetUserByEmail(string email)
+        public async Task<ApiResponse<UserDto>> GetUserByEmail(string email)
         {
             var user = await _userRepository.GetUserByEmail(email);
             if (user == null)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"User has email {email} not found.");
             }
-            return new ApiResponse { Success = true, Message = "Get user by email successfully.", Data = _mapper.Map<UserDto>(user) };
+            return new ApiResponse<UserDto> { Success = true, Message = "Get user by email successfully.", Data = _mapper.Map<UserDto>(user) };
         }
 
-        public async Task<ApiResponse> GetUserByID(int id)
+        public async Task<ApiResponse<UserDto>> GetUserByID(int id)
         {
             var user = await _userRepository.GetUserByID(id);
             if (user == null)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"User has id {id} not found.");
             }
-            return new ApiResponse { Success = true, Message = "Get user by id successfully.", Data = _mapper.Map<UserDto>(user) };
+            return new ApiResponse<UserDto> { Success = true, Message = "Get user by id successfully.", Data = _mapper.Map<UserDto>(user) };
         }
 
-        public async Task<ApiResponse> GetUserByUsername(string username)
+        public async Task<ApiResponse<UserDto>> GetUserByUsername(string username)
         {
             var user = await _userRepository.GetUserByUsername(username);
             if (user == null)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"User has username {username} not found.");
             }
-            return new ApiResponse { Success = true, Message = "Get user by username successfully.", Data = _mapper.Map<UserDto>(user) };
+            return new ApiResponse<UserDto> { Success = true, Message = "Get user by username successfully.", Data = _mapper.Map<UserDto>(user) };
 
         }
 
-        public async Task<ApiResponse> Register(UserRegisterDto userRegisterDto)
+        public async Task<ApiResponse<UserRegisterDto>> Register(UserRegisterDto userRegisterDto)
         {
             var isEmailExist = await _userRepository.IsEmailExist(userRegisterDto.Email);
             if (isEmailExist)
             {
                 throw new MyException((int)HttpStatusCode.OK, $"User has email {userRegisterDto.Email} already exist.");
             }
-            var isUsernameExist = await _userRepository.IsUsernameExist(userRegisterDto.Username);
-            if (isUsernameExist)
-            {
-                throw new MyException((int)HttpStatusCode.OK, $"User has username {userRegisterDto.Username} already exist.");
-            }
+            
             var user = _mapper.Map<Account>(userRegisterDto);
             var result = await _userRepository.Add(user);
             if (!result)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Add user account failed.");
             }
-            return new ApiResponse { Success = true, Message = "User registered successfully.", Data = _mapper.Map<UserRegisterDto>(user) };
+            return new ApiResponse<UserRegisterDto> { Success = true, Message = "User registered successfully.", Data = _mapper.Map<UserRegisterDto>(user) };
         }
 
-        public async Task<ApiResponse> UpdateUserByID(int id, UserUpdateDto user)
+        public async Task<ApiResponse<UserUpdateDto>> UpdateUserByID(int id, UserUpdateDto user)
         {
             var userUpdate = await _userRepository.GetUserByID(id);
             if (userUpdate == null)
@@ -109,7 +105,7 @@ namespace ASSystem.Services.User
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Update user account failed.");
             }
-            return new ApiResponse { Success = true, Message = "Update user account successfully.", Data = _mapper.Map<UserUpdateDto>(userUpdate) };
+            return new ApiResponse<UserUpdateDto> { Success = true, Message = "Update user account successfully.", Data = _mapper.Map<UserUpdateDto>(userUpdate) };
         }
     }
 }

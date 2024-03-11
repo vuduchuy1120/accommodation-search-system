@@ -19,5 +19,11 @@ namespace ASSystem.Controllers.Admin
             var result = await _adminServices.GetAllUser();
             return Ok(result);
         }
+        [HttpGet("GetUserRole")]
+        public async Task<IActionResult> GetUserRole()
+        {
+            var result = await _adminServices.getUserRole();
+            return Ok(result);
+        }
     }
 }

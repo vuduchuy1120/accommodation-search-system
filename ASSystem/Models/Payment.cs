@@ -1,4 +1,7 @@
-﻿namespace ASSystem.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace ASSystem.Models
 {
     public partial class Payment
     {

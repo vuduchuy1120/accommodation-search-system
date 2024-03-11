@@ -1,0 +1,176 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    <style>
+        .ContainerForm {
+            display: flex;
+        }
+
+            .ContainerForm div {
+                margin: 10px;
+            }
+
+                .ContainerForm div input {
+                    width: 100%;
+                }
+
+                .ContainerForm div textarea {
+                    width: 100%;
+                }
+
+                .ContainerForm div select {
+                    width: 100%;
+                }
+
+                .ContainerForm div button {
+                    width: 100%;
+                }
+
+        .LeftContent {
+            width: 65%;
+            height: 100%;
+        }
+
+        .RightContent {
+            width: 35%;
+            height: 100%;
+        }
+
+        .ImagesCSS {
+            border: 2px dashed #dee2e6;
+            padding: 10px;
+            width: 600px;
+            height: 600px;
+            text-align: center;
+            margin: 0px auto;
+        }
+
+        .uploadsImages {
+            width: 100%;
+            cursor: pointer;
+            margin: 0px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <h1>Create Motel</h1>
+
+    <hr />
+    <form method="post">
+        <input type="text" class="form-control" name="accountId" id="accountId" hidden>
+        <div class="ContainerForm">
+            <div class="LeftContent">
+                <div class="col">
+                    <div hidden>
+                        data image
+                    </div>
+                    <div class="mb-1 ImagesCSS">
+                        <label for="images" class="form-label uploadsImages" >Uploads Images</label>
+                        <input style="border: 1px solid #dee2e6;" type="file" class="form-control" name="images" id="images" multiple >
+                    </div>
+
+                </div>
+            </div>
+            <div class="RightContent">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="title" class="form-label">Title</label>
+                            <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="title" id="title" placeholder="Title">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea style="border: 1px solid #dee2e6;" class="form-control" name="description" id="description" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="address" class="form-label">Address</label>
+                            <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="address" id="address" placeholder="Address">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="price" class="form-label">Price</label>
+                            <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="price" id="price" placeholder="Price">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="quantityEmptyRooms" class="form-label">QuantityEmptyRooms</label>
+                            <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="quantityEmptyRooms" id="quantityEmptyRooms" placeholder="QuantityEmptyRooms">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="contact" class="form-label">Contact</label>
+                            <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="contact" id="contact" placeholder="Contact">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="province" class="form-label">province</label>
+                            <select class="form-control" id="province" name="province">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="district" class="form-label">district</label>
+                            <select class="form-control" id="district" name="district">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="ward" class="form-label">ward</label>
+                            <select class="form-control" id="ward" name="ward">
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" onclick="CreateMotel()">Submit</button>
+
+    </form>
+}
+<script>
+    const ImageId = document.querySelector('input[type="file"]');
+    const ImageLength = ImageId.files.length;
+    const handleUpload = () => {
+        if (ImageLength > 0) {
+            alert('You can only upload 1 image');
+            console.log(ImageLength);
+        } else {
+            console.log(ImageLength);
+        }
+    }
+
+    handleUpload();
+</script>

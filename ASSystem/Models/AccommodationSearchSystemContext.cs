@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ASSystem.Models
 {
@@ -18,10 +21,17 @@ namespace ASSystem.Models
         public virtual DbSet<Motel> Motels { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomImage> RoomImages { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\HUYVU;Database=AccommodationSearchSystem;uid=sa;pwd=123456;TrustServerCertificate=true");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +40,10 @@ namespace ASSystem.Models
                 entity.ToTable("Account");
 
                 entity.HasIndex(e => new { e.Username, e.Phone, e.Email }, "IX_Account")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("([Username] IS NOT NULL AND [Phone] IS NOT NULL)");
+
+                entity.HasIndex(e => e.RoleId, "IX_Account_RoleID");
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
@@ -84,34 +97,51 @@ namespace ASSystem.Models
 
                 entity.Property(e => e.Address).HasMaxLength(1000);
 
-                entity.Property(e => e.City).HasMaxLength(255);
-
                 entity.Property(e => e.Contact).HasMaxLength(255);
-
-                entity.Property(e => e.Country).HasMaxLength(255);
 
                 entity.Property(e => e.DeleteAt)
                     .HasColumnType("datetime")
                     .HasColumnName("deleteAt");
 
-                entity.Property(e => e.Description).HasMaxLength(1000);
+                entity.Property(e => e.Description).HasMaxLength(2500);
 
                 entity.Property(e => e.District).HasMaxLength(255);
 
-                entity.Property(e => e.MaxPrice).HasColumnType("money");
+                entity.Property(e => e.Price).HasColumnType("money");
 
-                entity.Property(e => e.MinPrice).HasColumnType("money");
+                entity.Property(e => e.Province).HasMaxLength(255);
+
+                entity.Property(e => e.Status).HasMaxLength(200);
 
                 entity.Property(e => e.Tittle).HasMaxLength(255);
+
+                entity.Property(e => e.Ward).HasMaxLength(255);
+
+                entity.HasMany(d => d.Covenients)
+                    .WithMany(p => p.Motels)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "Facility",
+                        l => l.HasOne<Convenient>().WithMany().HasForeignKey("Covenient").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Facility_Convenient"),
+                        r => r.HasOne<Motel>().WithMany().HasForeignKey("MotelId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Facility_Motel"),
+                        j =>
+                        {
+                            j.HasKey("MotelId", "Covenient").HasName("PK_Facility_1");
+
+                            j.ToTable("Facility");
+
+                            j.HasIndex(new[] { "Covenient" }, "IX_Facility_Covenient");
+
+                            j.IndexerProperty<int>("MotelId").HasColumnName("MotelID");
+                        });
             });
 
             modelBuilder.Entity<Payment>(entity =>
             {
                 entity.ToTable("Payment");
 
-                entity.Property(e => e.PaymentId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PaymentID");
+                entity.HasIndex(e => e.AccountId, "IX_Payment_AccountID");
+
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
@@ -136,77 +166,42 @@ namespace ASSystem.Models
                 entity.Property(e => e.Description).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Room>(entity =>
-            {
-                entity.ToTable("Room");
-
-                entity.Property(e => e.RoomId).HasColumnName("RoomID");
-
-                entity.Property(e => e.Acreage).HasMaxLength(200);
-
-                entity.Property(e => e.DeleteAt).HasColumnType("date");
-
-                entity.Property(e => e.MotelId).HasColumnName("MotelID");
-
-                entity.Property(e => e.Price).HasColumnType("money");
-
-                entity.Property(e => e.UnitPrice).HasMaxLength(255);
-
-                entity.HasOne(d => d.Motel)
-                    .WithMany(p => p.Rooms)
-                    .HasForeignKey(d => d.MotelId)
-                    .HasConstraintName("FK_Room_Motel");
-
-                entity.HasMany(d => d.Covenients)
-                    .WithMany(p => p.Rooms)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Facility",
-                        l => l.HasOne<Convenient>().WithMany().HasForeignKey("Covenient").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Facility_Convenient"),
-                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Facility_Room"),
-                        j =>
-                        {
-                            j.HasKey("RoomId", "Covenient").HasName("PK_Facility_1");
-
-                            j.ToTable("Facility");
-
-                            j.IndexerProperty<int>("RoomId").HasColumnName("RoomID");
-                        });
-            });
-
             modelBuilder.Entity<RoomImage>(entity =>
             {
                 entity.ToTable("RoomImage");
 
-                entity.Property(e => e.RoomImageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("RoomImageID");
+                entity.HasIndex(e => e.MotelId, "IX_RoomImage_MotelID");
+
+                entity.Property(e => e.RoomImageId).HasColumnName("RoomImageID");
 
                 entity.Property(e => e.ImageDetail)
                     .HasMaxLength(255)
                     .HasColumnName("imageDetail");
 
+                entity.Property(e => e.MotelId).HasColumnName("MotelID");
+
                 entity.Property(e => e.PathImageDetail)
                     .HasMaxLength(255)
                     .HasColumnName("pathImageDetail");
 
-                entity.Property(e => e.RoomId).HasColumnName("roomID");
-
-                entity.HasOne(d => d.Room)
+                entity.HasOne(d => d.Motel)
                     .WithMany(p => p.RoomImages)
-                    .HasForeignKey(d => d.RoomId)
+                    .HasForeignKey(d => d.MotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RoomImage_Room");
+                    .HasConstraintName("FK_RoomImage_Motel");
             });
 
             modelBuilder.Entity<Vote>(entity =>
             {
-                entity.HasKey(e => new { e.AccountId, e.RoomId });
+                entity.HasKey(e => new { e.AccountId, e.MotelId });
 
                 entity.ToTable("Vote");
 
+                entity.HasIndex(e => e.MotelId, "IX_Vote_MotelID");
+
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
-                entity.Property(e => e.RoomId).HasColumnName("RoomID");
+                entity.Property(e => e.MotelId).HasColumnName("MotelID");
 
                 entity.Property(e => e.ReviewStar)
                     .HasMaxLength(1)
@@ -218,11 +213,11 @@ namespace ASSystem.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Vote_Account");
 
-                entity.HasOne(d => d.Room)
+                entity.HasOne(d => d.Motel)
                     .WithMany(p => p.Votes)
-                    .HasForeignKey(d => d.RoomId)
+                    .HasForeignKey(d => d.MotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Vote_Room");
+                    .HasConstraintName("FK_Vote_Motel");
             });
 
             OnModelCreatingPartial(modelBuilder);
