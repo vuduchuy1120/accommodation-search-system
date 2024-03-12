@@ -35,13 +35,18 @@ namespace ASSystem.Services.Auth
 
         public async Task<ApiResponse<UserProfileDto>> Login(string username, string password)
         {
-           var user = await _authRepository.Login(username, password);
+            var user = await _authRepository.Login(username, password);
             if (user == null)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"Username or password is incorrect");
             }
             Console.WriteLine("Login successful");
-            return new ApiResponse<UserProfileDto> { Success = true, Message = "Login successful", Data = _mapper.Map<UserProfileDto>(user)};
+            return new ApiResponse<UserProfileDto>
+            {
+                Success = true,
+                Message = "Login successful",
+                Data = _mapper.Map<UserProfileDto>(user)
+            };
         }
 
         public Task<ApiResponse<UserProfileDto>> Logout()

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using ASSystem.Dtos
+@model MotelwithImagesDto
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -329,47 +332,28 @@
     </style>
 </head>
 <body>
+    <input type="hidden" id="motelId" name="motelId" />
     <div class="pd-wrap">
         <div class="container">
             <div class="heading-section">
-                <h2>Product Details</h2>
+                <h2>Motel Details</h2>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div id="slider" class="owl-carousel product-slider">
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                        <div class="item">
-                            <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" />
-                        </div>
-                    </div>
                     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            <div class="carousel-item active" data-bs-interval="10000">
-                                <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" class="d-block w-100" alt="...">
+                            <div class="carousel-item active">
+                                <img src="https://localhost:7280/api/Motel@(Model.RoomImages[0].PathImageDetail)" class="d-block w-100 h-100" />
                             </div>
-                            <div class="carousel-item" data-bs-interval="2000">
-                                <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://img.websosanh.vn/v2/users/review/images/4wvuq0i4ozs1q.jpg?compress=85" class="d-block w-100" alt="...">
-                            </div>
+                            @if (Model.RoomImages.Count > 1)
+                            {
+                                @for (int i = 1; i < Model.RoomImages.Count; i++)
+                                {
+                                    <div class="carousel-item">
+                                        <img src="https://localhost:7280/api/Motel@(Model.RoomImages[i].PathImageDetail)" class="d-block w-100 h-100" />
+                                    </div>
+                                }
+                            }
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -384,7 +368,7 @@
                 <div class="col-md-6">
                     <div class="product-dtl">
                         <div class="product-info">
-                            <div class="product-name">Variable Product</div>
+                            <div class="product-name fw-bold text-center">@Model.Tittle</div>
                             <div class="reviews-counter">
                                 <div class="rate">
                                     <input type="radio" id="star5" name="rate" value="5" checked />
@@ -400,36 +384,22 @@
                                 </div>
                                 <span>3 Reviews</span>
                             </div>
-                            <div class="product-price-discount"><span>$39.00</span><span class="line-through">$29.00</span></div>
+                            <div class="product-price-discount"><span style="color: red; font-weight:bold; font-size:24px">@Model.Price.Value.ToString("#0.0") triệu/ tháng</span></div>
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>@Model.Description</p>
+                        <br />
+                        <div class="mt-1 mb-0 text-muted small">
+                            <img src="../location.png" style='height:24px; width:auto'></img>
+                            <span>  @Model.Address,@Model.Ward, @Model.District, @Model.Province</span>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="size">Size</label>
-                                <select id="size" name="size" class="form-control">
-                                    <option>S</option>
-                                    <option>M</option>
-                                    <option>L</option>
-                                    <option>XL</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="color">Color</label>
-                                <select id="color" name="color" class="form-control">
-                                    <option>Blue</option>
-                                    <option>Green</option>
-                                    <option>Red</option>
-                                </select>
+                                <label for="size">Số lượng phòng còn trống</label>
+                                <input id="quantity" name="quanty" class="form-control" value="@Model.QuantityEmptyRooms"/>
                             </div>
                         </div>
-                        <div class="product-count">
-                            <label for="size">Quantity</label>
-                            <form action="#" class="display-flex">
-                                <div class="qtyminus">-</div>
-                                <input type="text" name="quantity" value="1" class="qty">
-                                <div class="qtyplus">+</div>
-                            </form>
-                            <a href="#" class="round-black-btn">Add to Cart</a>
+                        <div class="product-count">                           
+                            <a href="#" class="round-black-btn">Liên hệ</a>
                         </div>
                     </div>
                 </div>
@@ -497,88 +467,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function () {
-            var slider = $("#slider");
-            var thumb = $("#thumb");
-            var slidesPerPage = 4; //globaly define number of elements per page
-            var syncedSecondary = true;
-            slider.owlCarousel({
-                items: 1,
-                slideSpeed: 2000,
-                nav: false,
-                autoplay: false,
-                dots: false,
-                loop: true,
-                responsiveRefreshRate: 200
-            }).on('changed.owl.carousel', syncPosition);
-            thumb
-                .on('initialized.owl.carousel', function () {
-                    thumb.find(".owl-item").eq(0).addClass("current");
-                })
-                .owlCarousel({
-                    items: slidesPerPage,
-                    dots: false,
-                    nav: true,
-                    item: 4,
-                    smartSpeed: 200,
-                    slideSpeed: 500,
-                    slideBy: slidesPerPage,
-                    navText: ['<svg width="18px" height="18px" viewBox="0 0 11 20"><path style="fill:none;stroke-width: 1px;stroke: #000;" d="M9.554,1.001l-8.607,8.607l8.607,8.606"/></svg>', '<svg width="25px" height="25px" viewBox="0 0 11 20" version="1.1"><path style="fill:none;stroke-width: 1px;stroke: #000;" d="M1.054,18.214l8.606,-8.606l-8.606,-8.607"/></svg>'],
-                    responsiveRefreshRate: 100
-                }).on('changed.owl.carousel', syncPosition2);
-            function syncPosition(el) {
-                var count = el.item.count - 1;
-                var current = Math.round(el.item.index - (el.item.count / 2) - .5);
-                if (current < 0) {
-                    current = count;
-                }
-                if (current > count) {
-                    current = 0;
-                }
-                thumb
-                    .find(".owl-item")
-                    .removeClass("current")
-                    .eq(current)
-                    .addClass("current");
-                var onscreen = thumb.find('.owl-item.active').length - 1;
-                var start = thumb.find('.owl-item.active').first().index();
-                var end = thumb.find('.owl-item.active').last().index();
-                if (current > end) {
-                    thumb.data('owl.carousel').to(current, 100, true);
-                }
-                if (current < start) {
-                    thumb.data('owl.carousel').to(current - onscreen, 100, true);
-                }
-            }
-            function syncPosition2(el) {
-                if (syncedSecondary) {
-                    var number = el.item.index;
-                    slider.data('owl.carousel').to(number, 100, true);
-                }
-            }
-            thumb.on("click", ".owl-item", function (e) {
-                e.preventDefault();
-                var number = $(this).index();
-                slider.data('owl.carousel').to(number, 300, true);
-            });
 
-
-            $(".qtyminus").on("click", function () {
-                var now = $(".qty").val();
-                if ($.isNumeric(now)) {
-                    if (parseInt(now) - 1 > 0) { now--; }
-                    $(".qty").val(now);
-                }
-            })
-            $(".qtyplus").on("click", function () {
-                var now = $(".qty").val();
-                if ($.isNumeric(now)) {
-                    $(".qty").val(parseInt(now) + 1);
-                }
-            });
-        });
-    </script>
 </body>
 </html>

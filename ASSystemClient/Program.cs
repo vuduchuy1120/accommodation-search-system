@@ -15,8 +15,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
        options.LoginPath = "/Login";
    });
 builder.Services.AddAuthorization(
-    options => options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "1"))
-    );
+    options =>
+    {
+        options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "1"));
+        options.AddPolicy("MotelManager", policy => policy.RequireClaim("Role", "2"));
+    }
+);
 
 
 var app = builder.Build();

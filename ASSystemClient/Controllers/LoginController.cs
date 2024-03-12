@@ -49,6 +49,7 @@ namespace ASSystemClient.Controllers
 
                             var claims = new List<Claim>
                                     {
+                                        new Claim("AccountId", user.AccountId.ToString()),
                                         new Claim(ClaimTypes.NameIdentifier, user.Email),
                                         new Claim("Role", user.RoleId.ToString())
                                     };
@@ -86,6 +87,12 @@ namespace ASSystemClient.Controllers
                 }
 
             }
+        }
+
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

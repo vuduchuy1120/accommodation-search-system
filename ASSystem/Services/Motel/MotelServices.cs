@@ -22,12 +22,10 @@ namespace ASSystem.Services.Motel
             {
                 var motel = _mapper.Map<ASSystem.Models.Motel>(motelDto);
                 var result = await _motelRepository.CreateMotel(motel);
-
                 if (!result)
                 {
                     throw new MyException((int)HttpStatusCode.BadRequest, "Create motel failed.");
                 }
-
                 return new ApiResponse<MotelDto>
                 {
                     Success = true,
@@ -39,7 +37,6 @@ namespace ASSystem.Services.Motel
             {
                 // Log the exception for debugging or monitoring purposes
                 // logger.LogError(ex, "Error occurred while creating motel.");
-
                 return new ApiResponse<MotelDto>
                 {
                     Success = false,
@@ -48,12 +45,11 @@ namespace ASSystem.Services.Motel
                 };
             }
         }
-
         public Task<ApiResponse<MotelDto>> DeleteMotel(int id)
         {
             throw new NotImplementedException();
         }
-
+      
         public async Task<ApiResponse<List<MotelwithImagesDto>>> GetAllMotel()
         {
             var motels = await _motelRepository.GetAllMotel();
@@ -115,10 +111,7 @@ namespace ASSystem.Services.Motel
 
         }
 
-        public Task<ApiResponse<MotelDto>> UpdateMotel(MotelDto motel)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public async Task<ApiResponse<MotelwithImagesDto>> UploadImage(int id, IFormFile[] images)
         {
@@ -198,6 +191,50 @@ namespace ASSystem.Services.Motel
                     Data = null
                 };
             }
+        }
+
+        public async Task<ApiResponse<MotelDto>> UpdateMotel(int id, MotelUpdateDto motelDto)
+        {
+            var motel = await _motelRepository.GetMotelById(id);
+
+            if (motel == null)
+            {
+                return new ApiResponse<MotelDto>
+                {
+                    Success = false,
+                    Message = "Motel not found.",
+                    Data = null
+                };
+            }
+
+            motel.Tittle = motelDto.Tittle;
+            motel.Description = motelDto.Description;
+            motel.Address = motelDto.Address;
+            motel.Price = motelDto.Price;
+            motel.QuantityEmptyRooms = motelDto.QuantityEmptyRooms;
+            motel.Contact = motelDto.Contact;
+            motel.Province = motelDto.Province;
+            motel.District = motelDto.District;
+            motel.Ward = motelDto.Ward;
+            
+            var result = await _motelRepository.UpdateMotel(motel);
+            if (!result)
+            {
+                return new ApiResponse<MotelDto>
+                {
+                    Success = false,
+                    Message = "Update motel failed.",
+                    Data = null
+                };
+            }
+            return new ApiResponse<MotelDto>
+            {
+                Success = true,
+                Message = "Update motel successfully.",
+                Data = _mapper.Map<MotelDto>(motel)
+            };
+
+
         }
     }
 }

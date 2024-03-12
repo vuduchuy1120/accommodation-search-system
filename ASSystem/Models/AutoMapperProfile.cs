@@ -36,8 +36,8 @@ namespace ASSystem.Models
             CreateMap<MotelwithImagesDto, Motel>();
             CreateMap<Motel, MotelwithImagesDto>();
 
-
-
+            CreateMap<Motel, MotelUpdateDto>();
+            CreateMap<MotelUpdateDto, Motel>();
 
         }
     }

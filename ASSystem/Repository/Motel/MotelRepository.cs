@@ -43,5 +43,11 @@ namespace ASSystem.Repository.Motel
             _context.RoomImages.Add(roomImage);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> UpdateMotel(ASSystem.Models.Motel motel)
+        {
+            _context.Motels.Update(motel);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

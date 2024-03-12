@@ -48,9 +48,38 @@ namespace ASSystemClient.Controllers
             return View();
         }
         // Form
-        public IActionResult Form()
+        public async Task<IActionResult> Form(int id)
         {
-            return View();
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    using (var response = await client.GetAsync(_baseUrl + $"/{id}"))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var motel = await response.Content.ReadFromJsonAsync<ApiResponse<MotelwithImagesDto>>();
+
+                            if (motel.Success)
+                            {
+                                return View(motel.Data);
+                            }
+                            else
+                            {
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            return View();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return View();
+                }
+            }
         }
 
         // Details
@@ -87,5 +116,7 @@ namespace ASSystemClient.Controllers
                 }
             }
         }
+
+         
     }
 }

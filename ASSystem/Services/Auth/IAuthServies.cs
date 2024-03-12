@@ -7,8 +7,6 @@ namespace ASSystem.Services.Auth
     {
         public Task<ApiResponse<UserProfileDto>> Login(string username, string password);
         public Task<ApiResponse<UserProfileDto>> Logout();
-
-
         // genarate token
         public string GenerateJSONWebToken();
         // genarate refresh token

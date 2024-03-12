@@ -42,6 +42,11 @@ builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<MotelRepository>();
 builder.Services.AddScoped<IMotelServices, MotelServices>();
 
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoomImagesRepository>();
+builder.Services.AddScoped<IRoomImagesServices, RoomImagesServices>();
+
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
 var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);

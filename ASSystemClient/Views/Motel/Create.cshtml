@@ -5,7 +5,10 @@
 
 <hr />
 <form method="post">
-    <input type="text" class="form-control" name="accountId" id="accountId" hidden>
+    <!--Get account iD by claims-->
+
+
+    <input type="text" class="form-control" hidden name="accountId" id="accountId" value="@User.Claims.FirstOrDefault(c => c.Type == "AccountId")?.Value">
     <div class="row">
         <div class="col">
             <div class="mb-1">
@@ -181,11 +184,10 @@
         var district = document.getElementById("district").value;
         var ward = document.getElementById("ward").value;
         var images = document.getElementById("images").files;
-        // var accountId = document.getElementById("accountId").value;
-        var accountId = 4;
+        var accountId = document.getElementById("accountId").value;
         var formData = new FormData();
         formData.append("motelJson", JSON.stringify({
-            title: title,
+            tittle: title,
             description: description,
             address: address,
             price: price,
@@ -205,12 +207,15 @@
         })
             .then(response => {
                 if (!response.ok) {
+                    console.log(response);
                     throw new Error('Network response was not ok');
+                    
                 }
                 return response.json();
             })
             .then(data => {
                 console.log(data);
+                window.location.href = "/Motel/Index";
                 // You might want to handle success here, maybe redirect to a success page or show a success message
             })
             .catch(error => {

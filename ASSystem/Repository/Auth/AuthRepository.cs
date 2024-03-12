@@ -19,7 +19,5 @@ namespace ASSystem.Repository.Auth
             Account user = await _context.Accounts.FirstOrDefaultAsync(x => x.Email.Trim() == email.Trim() && x.Password == password);
             return user;
         }
-
-
     }
 }

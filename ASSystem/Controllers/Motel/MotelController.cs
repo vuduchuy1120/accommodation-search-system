@@ -93,5 +93,26 @@ namespace ASSystem.Controllers.Motel
             }
             return BadRequest(result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMotel(int id, [FromForm] string motelJson , IFormFile[] images)
+        {
+            var motel = JsonConvert.DeserializeObject<ASSystem.Models.Motel>(motelJson);
+
+            var result = await _motelServices.UpdateMotel(id, _mapp.Map<MotelUpdateDto>(motel));
+
+            if (result.Success)
+            {
+                int idMotel = result.Data.MotelId;
+                var uploadResult = await _motelServices.UploadImage(idMotel, images);
+                if (uploadResult.Success)
+                {
+                    return Ok(uploadResult);
+                }
+            }
+            return BadRequest(result);
+        }
+
+   
     }
 }
