@@ -336,7 +336,7 @@
     <div class="pd-wrap">
         <div class="container">
             <div class="heading-section">
-                <h2>Motel Details</h2>
+                <h2>Motel</h2>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -384,22 +384,27 @@
                                 </div>
                                 <span>3 Reviews</span>
                             </div>
-                            <div class="product-price-discount"><span style="color: red; font-weight:bold; font-size:24px">@Model.Price.Value.ToString("#0.0") triệu/ tháng</span></div>
+                            <div class="product-price-discount">
+                                <span style="color: red; font-weight:bold; font-size:24px">
+                                    <img src="../vnd.png" style="width:30px ; height:auto">
+                                    @Model.Price.Value.ToString("#0.0") triệu/ tháng
+                                </span>
+                            </div>
                         </div>
                         <p>@Model.Description</p>
                         <br />
                         <div class="mt-1 mb-0 text-muted small">
                             <img src="../location.png" style='height:24px; width:auto'></img>
-                            <span>  @Model.Address,@Model.Ward, @Model.District, @Model.Province</span>
+                            <span>  @Model.Address</span>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="size">Số lượng phòng còn trống</label>
-                                <input id="quantity" name="quanty" class="form-control" value="@Model.QuantityEmptyRooms"/>
+                                <input id="quantity" name="quanty" class="form-control" value="@Model.QuantityEmptyRooms" />
                             </div>
                         </div>
-                        <div class="product-count">                           
-                            <a href="#" class="round-black-btn">Liên hệ</a>
+                        <div class="product-count">
+                            <a href="tel:@Model.Contact" class="round-black-btn"><img src="../call.png" style="width: 30px ; height: auto" /><span>  @Model.Contact </span></a>
                         </div>
                     </div>
                 </div>
@@ -415,7 +420,7 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                        @Model.DescriptionDetails
                     </div>
                     <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="review-heading">REVIEWS</div>

@@ -8,6 +8,8 @@
         public string Password { get; set; } = null!;
         public string? Phone { get; set; }
         public int RoleId { get; set; }
+
+        public bool? IsActive { get; set; }
         public bool? Gender { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

@@ -18,7 +18,7 @@ builder.Services.AddAuthorization(
     options =>
     {
         options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "1"));
-        options.AddPolicy("MotelManager", policy => policy.RequireClaim("Role", "2"));
+        options.AddPolicy("Leaser", policy => policy.RequireClaim("Role", "3"));
     }
 );
 
@@ -42,6 +42,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Motel}/{action=Index}/{id?}");
 
 app.Run();

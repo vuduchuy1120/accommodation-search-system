@@ -18,12 +18,16 @@ namespace ASSystem.Services.User
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<UserChangePasswordDto>> ChangePassword(string email, UserChangePasswordDto userChangePasswordDto)
+        public async Task<ApiResponse<UserChangePasswordDto>> ChangePassword(int id, UserChangePasswordDto userChangePasswordDto)
         {
-            var user = await _userRepository.GetUserByEmail(email);
+            var user = await _userRepository.GetAccountById(id);
             if (user == null)
             {
-                throw new MyException((int)HttpStatusCode.NotFound, $"User has email {email} not found.");
+                throw new MyException((int)HttpStatusCode.NotFound, $"User has id {id} not found.");
+            }
+            if(user.Password != userChangePasswordDto.OldPassword)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, "Old password is incorrect.");
             }
             user.Password = userChangePasswordDto.Password;
             var result = await _userRepository.Update(user);
@@ -75,6 +79,7 @@ namespace ASSystem.Services.User
             }
             
             var user = _mapper.Map<Account>(userRegisterDto);
+            user.IsActive = true;
             var result = await _userRepository.Add(user);
             if (!result)
             {
@@ -90,16 +95,25 @@ namespace ASSystem.Services.User
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"User has id {id} not found.");
             }
-            var isPhoneExist = await _userRepository.IsPhoneExist(user.Phone);
-            if (isPhoneExist)
+            if(userUpdate.Phone != user.Phone)
             {
-                throw new MyException((int)HttpStatusCode.OK, $"User has phone {user.Phone} already exist.");
+                var isPhoneExist = await _userRepository.IsPhoneExist(user.Phone);
+                if (isPhoneExist)
+                {
+                    throw new MyException((int)HttpStatusCode.OK, $"User has phone {user.Phone} already exist.");
+                }
+                userUpdate.FirstName = user.FirstName;
+                userUpdate.LastName = user.LastName;
+                userUpdate.Phone = user.Phone;
+                userUpdate.Address = user.Address;
             }
-            userUpdate.FirstName = user.FirstName;
-            userUpdate.LastName = user.LastName;
-            userUpdate.Phone = user.Phone;
-            userUpdate.Gender = user.Gender;
-
+            else
+            {
+                userUpdate.FirstName = user.FirstName;
+                userUpdate.LastName = user.LastName;
+                userUpdate.Address = user.Address;
+            }
+            
             var result = await _userRepository.Update(userUpdate);
             if (!result)
             {

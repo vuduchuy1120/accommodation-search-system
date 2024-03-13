@@ -21,6 +21,8 @@ namespace ASSystem.Services.Motel
             try
             {
                 var motel = _mapper.Map<ASSystem.Models.Motel>(motelDto);
+                motel.CreateAt = DateTime.Now;
+                motel.Status = "Processing";
                 var result = await _motelRepository.CreateMotel(motel);
                 if (!result)
                 {
@@ -45,9 +47,36 @@ namespace ASSystem.Services.Motel
                 };
             }
         }
-        public Task<ApiResponse<MotelDto>> DeleteMotel(int id)
+        public async Task<ApiResponse<MotelwithImagesDto>> DeleteMotel(int id)
         {
-            throw new NotImplementedException();
+            var motel = await _motelRepository.GetMotelById(id);
+            if (motel == null)
+            {
+                return new ApiResponse<MotelwithImagesDto>
+                {
+                    Success = false,
+                    Message = "Motel not found.",
+                    Data = null
+                };
+            }
+            motel.DeleteAt = DateTime.Now;
+            var result = await _motelRepository.UpdateMotel(motel);
+            if (!result)
+            {
+                return new ApiResponse<MotelwithImagesDto>
+                {
+                    Success = false,
+                    Message = "Delete motel failed.",
+                    Data = null
+                };
+            }
+            return new ApiResponse<MotelwithImagesDto>
+            {
+                Success = true,
+                Message = "Delete motel successfully.",
+                Data = _mapper.Map<MotelwithImagesDto>(motel)
+            };
+
         }
       
         public async Task<ApiResponse<List<MotelwithImagesDto>>> GetAllMotel()
@@ -61,10 +90,7 @@ namespace ASSystem.Services.Motel
             };
         }
 
-        public Task<ApiResponse<List<MotelDto>>> GetMotelByAccountId(int accountId)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public async Task<ApiResponse<MotelwithImagesDto>> GetMotelById(int id)
         {
@@ -85,6 +111,7 @@ namespace ASSystem.Services.Motel
                 AccountId = motel1.AccountId,
                 Tittle = motel1.Tittle,
                 Description = motel1.Description,
+                Area = motel1.Area,
                 Address = motel1.Address,
                 Price = motel1.Price,
                 QuantityEmptyRooms = motel1.QuantityEmptyRooms,
@@ -94,6 +121,11 @@ namespace ASSystem.Services.Motel
                 Ward = motel1.Ward,
                 Status = motel1.Status,
                 DeleteAt = motel1.DeleteAt,
+                CreateAt = motel1.CreateAt,
+                Longitude = motel1.Longitude,
+                Latitude = motel1.Latitude,
+                DescriptionDetails = motel1.DescriptionDetails,
+
 
                 RoomImages = motel1.RoomImages.Select(x => new RoomImageDto
                 {
@@ -110,8 +142,51 @@ namespace ASSystem.Services.Motel
             };
 
         }
+        public async Task<ApiResponse<List<MotelwithImagesDto>>> GetMotelByAccountId(int accountId)
+        {
+            var motels = await _motelRepository.GetMotelByAccountId(accountId);
+            //foreach (var motel1 in motels)
+            //{
+            //    MotelwithImagesDto motelMap = new MotelwithImagesDto
+            //    {
+            //        MotelId = motel1.MotelId,
+            //        AccountId = motel1.AccountId,
+            //        Tittle = motel1.Tittle,
+            //        Description = motel1.Description,
+            //        Area = motel1.Area,
+            //        Address = motel1.Address,
+            //        Price = motel1.Price,
+            //        QuantityEmptyRooms = motel1.QuantityEmptyRooms,
+            //        Contact = motel1.Contact,
+            //        Province = motel1.Province,
+            //        District = motel1.District,
+            //        Ward = motel1.Ward,
+            //        Status = motel1.Status,
+            //        DeleteAt = motel1.DeleteAt,
+            //        CreateAt = motel1.CreateAt,
+            //        Longitude = motel1.Longitude,
+            //        Latitude = motel1.Latitude,
+            //        DescriptionDetails = motel1.DescriptionDetails,
 
-        
+
+            //        RoomImages = motel1.RoomImages.Select(x => new RoomImageDto
+            //        {
+            //            RoomImageId = x.RoomImageId,
+            //            MotelId = x.MotelId,
+            //            PathImageDetail = x.PathImageDetail
+            //        }).ToList()
+            //    };
+            //}
+
+            return new ApiResponse<List<MotelwithImagesDto>>
+            {
+                Success = true,
+                Message = "Get all motels successfully.",
+                Data = _mapper.Map<List<MotelwithImagesDto>>(motels)
+            };
+        }
+
+
 
         public async Task<ApiResponse<MotelwithImagesDto>> UploadImage(int id, IFormFile[] images)
         {
@@ -158,6 +233,7 @@ namespace ASSystem.Services.Motel
                     AccountId = motel1.AccountId,
                     Tittle = motel1.Tittle,
                     Description = motel1.Description,
+                    Area = motel1.Area,
                     Address = motel1.Address,
                     Price = motel1.Price,
                     QuantityEmptyRooms = motel1.QuantityEmptyRooms,
@@ -167,6 +243,10 @@ namespace ASSystem.Services.Motel
                     Ward = motel1.Ward,
                     Status = motel1.Status,
                     DeleteAt = motel1.DeleteAt,
+                    CreateAt = motel1.CreateAt,
+                    Longitude = motel1.Longitude,
+                    Latitude = motel1.Latitude,
+                    DescriptionDetails = motel1.DescriptionDetails,
 
                     RoomImages = motel1.RoomImages.Select(x => new RoomImageDto
                     {
@@ -210,12 +290,16 @@ namespace ASSystem.Services.Motel
             motel.Tittle = motelDto.Tittle;
             motel.Description = motelDto.Description;
             motel.Address = motelDto.Address;
+            motel.Area = motelDto.Area;
             motel.Price = motelDto.Price;
             motel.QuantityEmptyRooms = motelDto.QuantityEmptyRooms;
             motel.Contact = motelDto.Contact;
             motel.Province = motelDto.Province;
             motel.District = motelDto.District;
             motel.Ward = motelDto.Ward;
+            motel.Longitude = motelDto.Longitude;
+            motel.Latitude = motelDto.Latitude;
+            motel.DescriptionDetails = motelDto.DescriptionDetails;
             
             var result = await _motelRepository.UpdateMotel(motel);
             if (!result)
@@ -235,6 +319,17 @@ namespace ASSystem.Services.Motel
             };
 
 
+        }
+
+        public async Task<ApiResponse<List<MotelwithImagesDto>>> SearchMotel(string? province, string? district, string? ward, Decimal? price, double? area, string? title)
+        {
+            var motels = await _motelRepository.SearchMotel(province, district, ward, price, area, title);
+            return new ApiResponse<List<MotelwithImagesDto>>
+            {
+                Success = true,
+                Message = "Search motels successfully.",
+                Data = _mapper.Map<List<MotelwithImagesDto>>(motels)
+            };
         }
     }
 }

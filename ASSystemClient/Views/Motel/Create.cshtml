@@ -36,8 +36,24 @@
     <div class="row">
         <div class="col">
             <div class="mb-1">
-                <label for="price" class="form-label">Price</label>
-                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="price" id="price" placeholder="Price">
+                <label for="Area" class="form-label">Area (m²)</label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="area" id="area" placeholder="example: 25">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="Area" class="form-label">Description Details </label>
+                <textarea style="border: 1px solid #dee2e6;" class="form-control" name="descriptionDetails" id="descriptionDetails" placeholder="Description Details"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label for="price" class="form-label">Price (triệu/tháng) </label>
+                <input style="border: 1px solid #dee2e6;" type="text" class="form-control" name="price" id="price" placeholder="Example: 2.5">
             </div>
         </div>
     </div>
@@ -185,10 +201,15 @@
         var ward = document.getElementById("ward").value;
         var images = document.getElementById("images").files;
         var accountId = document.getElementById("accountId").value;
+        var area = document.getElementById("area").value;
+        var descriptionDetails = document.getElementById("descriptionDetails").value;
         var formData = new FormData();
+
         formData.append("motelJson", JSON.stringify({
             tittle: title,
             description: description,
+            area: area,
+            descriptionDetails: descriptionDetails,
             address: address,
             price: price,
             quantityEmptyRooms: quantityEmptyRooms,
@@ -209,7 +230,7 @@
                 if (!response.ok) {
                     console.log(response);
                     throw new Error('Network response was not ok');
-                    
+
                 }
                 return response.json();
             })

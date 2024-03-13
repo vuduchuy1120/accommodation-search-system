@@ -49,10 +49,10 @@ namespace ASSystem.Controllers.User
             return Ok(result);
         }
 
-        [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(string email, UserChangePasswordDto user)
+        [HttpPut("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(int id, UserChangePasswordDto user)
         {
-            var result = await _userServices.ChangePassword(email, user);
+            var result = await _userServices.ChangePassword(id, user);
             return Ok(result);
         }
 

@@ -11,7 +11,7 @@ namespace ASSystem.Services.User
         Task<ApiResponse<UserDto>> GetUserByUsername(string username);
         Task<ApiResponse<UserDto>> GetUserByEmail(string email);
 
-        Task<ApiResponse<UserChangePasswordDto>> ChangePassword(string email, UserChangePasswordDto user);
+        Task<ApiResponse<UserChangePasswordDto>> ChangePassword(int id, UserChangePasswordDto user);
 
         //Task<ApiResponse> Search(int page, int pageSize);
     }

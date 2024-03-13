@@ -42,6 +42,7 @@
                                 <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
                                 <input type="password" name="re_password" id="re_pass" placeholder="Repeat your password" />
                             </div>
+                            <span id="message" style="color: red;"></span>
                             <div class="form-group">
                                 <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
                                 <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
@@ -76,7 +77,10 @@
                     data.data.forEach((role) => {
                         html += `<option value="${role.roleId}">${role.description}</option>`;
                     });
+
                     $("#roleId").html(html);
+                    $("hiddenRoleId").val(2);
+                    $("roleId").val(2);
                     $("#roleId").change(function () {
                         const selectedRoleId = $(this).val();
                         $("#hiddenRoleId").val(selectedRoleId);
@@ -87,6 +91,20 @@
         getCategories();
 
 
+    </script>
+    <script>
+        function getParameterByName(name) {
+
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(window.location.search);
+
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        var paramValue = getParameterByName('Message');
+        document.getElementById("message").innerHTML = paramValue;
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

@@ -57,6 +57,7 @@ namespace ASSystem.Repository.User
             return await _context.Accounts.FirstOrDefaultAsync(x => x.Username == username);
         }
         // update
+
         public async Task<bool> Update(Account account)
         {
             _context.Accounts.Update(account);

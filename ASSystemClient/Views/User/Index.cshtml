@@ -1,145 +1,147 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using ASSystem.Dtos.User
+@model UserDto
 
-<head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Colorlib Templates">
-    <meta name="author" content="Colorlib">
-    <meta name="keywords" content="Colorlib Templates">
-
-    <!-- Title Page-->
-    <title>Au Register Forms by Colorlib</title>
-
-    <!-- Icons font CSS-->
-    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
-    <!-- Font special for pages-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
-
-    <!-- Vendor CSS-->
-    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
-    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
-
-    <!-- Main CSS-->
-    <link href="css/main.css" rel="stylesheet" media="all">
-</head>
-
-<body>
-    <div class="page-wrapper p-t-45 p-b-50">
-        <div class="wrapper wrapper--w790">
-            <div class="card card-5">
-                <div class="card-heading">
-                    <h2 class="title">Event Registration Form</h2>
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                <span class="font-weight-bold">@Model.FirstName   @Model.LastName</span><span class="text-black-50">@Model.Email</span><span> </span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
                 </div>
-                <div class="card-body">
-                    <form method="POST">
-                        <div class="form-row m-b-55">
-                            <div class="name">Name</div>
-                            <div class="value">
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="first_name">
-                                            <label class="label--desc">first name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="last_name">
-                                            <label class="label--desc">last name</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <form>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="labels">First Name</label><input type="text" id="firstName" class="form-control" placeholder="first name" value="@Model.FirstName">
+                            <span hidden id="errFirstName" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="name">Address</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <input class="input--style-5" type="text" name="address">
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="labels">Last Name</label><input type="text" id="lastName" class="form-control" value="@Model.LastName" placeholder="LastName">
+                            <span hidden id="errLastName" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="name">Email</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <input class="input--style-5" type="email" readonly name="email">
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Mobile Number</label>
+                            <input type="text" class="form-control" id="phone" placeholder="enter phone number" value="@Model.Phone">
+                            <span hidden id="errPhone" class="text-danger"></span>
                         </div>
-                        <div class="form-row m-b-55">
-                            <div class="name">Phone</div>
-                            <div class="value">
-                                <div class="row row-refine">
-                                    <div class="col-3">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="area_code">
-                                            <label class="label--desc">Area Code</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="input-group-desc">
-                                            <input class="input--style-5" type="text" name="phone">
-                                            <label class="label--desc">Phone Number</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="name">Subject</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="subject">
-                                            <option disabled="disabled" selected="selected">Choose option</option>
-                                            <option>Subject 1</option>
-                                            <option>Subject 2</option>
-                                            <option>Subject 3</option>
-                                        </select>
-                                        <div class="select-dropdown"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row p-t-20">
-                            <label class="label label--block">Are you an existing customer?</label>
-                            <div class="p-t-15">
-                                <label class="radio-container m-r-55">
-                                    Yes
-                                    <input type="radio" checked="checked" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="radio-container">
-                                    No
-                                    <input type="radio" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="btn btn--radius-2 btn--red" type="submit">Register</button>
-                        </div>
-                    </form>
-                </div>
+                        <div class="col-md-12 mt-3"><label class="labels">Email</label><input type="text" class="form-control" readonly value="@Model.Email"></div>
+
+                        <div class="col-md-12 mt-3"><label class="labels">Address</label><input type="text" class="form-control" id="address" placeholder="Enter your address" value="@Model.Address"></div>
+
+
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" onclick="UpdateProfile()" type="button">Save Profile </button></div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience">
+                    <h4 class="text-right">Changes Password</h4>
+                </div><br>
+                <form>
+                    <div class="col-md-12">
+                        <label class="labels">Old Password</label><input type="password" class="form-control" id="oldPassword" placeholder="Enter old password" value="">
+                        <span hidden id="errOldPassWord" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">New Password</label><input type="password" class="form-control" id="newPassword" placeholder="Enter new password" value="">
+                        <span hidden id="errNewPassword" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="labels">Confirm New Password</label><input type="password" class="form-control" id="confirmPassword" placeholder="Enter confirm new password" value="">
+                        <span hidden id="errConfirmPassWord" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-5"><button class="btn btn-primary profile-button" onclick="changePassword()" type="button">Change password </button></div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Jquery JS-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- Vendor JS-->
-    <script src="vendor/select2/select2.min.js"></script>
-    <script src="vendor/datepicker/moment.min.js"></script>
-    <script src="vendor/datepicker/daterangepicker.js"></script>
+<script>
 
-    <!-- Main JS-->
-    <script src="js/global.js"></script>
+    function UpdateProfile() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
 
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+        var accountId = @User.Claims.FirstOrDefault(c => c.Type == "AccountId")?.Value;
+        fetch('https://localhost:7280/api/User/UpdateUserByID?id=' + accountId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "firstName": firstName,
+                "lastName": lastName,
+                "phone": phone,
+                "address": address
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    //display error message
+                    var err = document.getElementById("errPhone");
+                    err.innerHTML = "Phone number is aldreay exist!";
+                    err.hidden = false;
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                alert("Profile Updated");
+                location.reload();
+            });
+    };
+    function changePassword() {
+        var oldPassword = document.getElementById("oldPassword").value;
+        var newPassword = document.getElementById("newPassword").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        if (newPassword != confirmPassword) {
+            var err = document.getElementById("errConfirmPassWord");
+            err.innerHTML = "Confirm password is incorrect!";
+            err.hidden = false;
+            return;
+        }
 
-</html>
-<!-- end document-->
+        var accountId = @User.Claims.FirstOrDefault(c => c.Type == "AccountId")?.Value;
+        fetch('https://localhost:7280/api/User/ChangePassword?id=' + accountId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "oldPassword": oldPassword,
+                "password": newPassword
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    //display error message
+                    var err = document.getElementById("errOldPassWord");
+                    err.innerHTML = "Old password is incorrect!";
+                    err.hidden = false;
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                alert("Password Changed");
+                location.reload();
+            });
+    }
+
+
+</script>

@@ -47,9 +47,9 @@ namespace ASSystem.Models
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
-                entity.Property(e => e.DeleteAt)
-                    .HasColumnType("date")
-                    .HasColumnName("deleteAt");
+                entity.Property(e => e.Address).HasMaxLength(500);
+
+                entity.Property(e => e.DeleteAt).HasColumnType("date");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
@@ -99,13 +99,23 @@ namespace ASSystem.Models
 
                 entity.Property(e => e.Contact).HasMaxLength(255);
 
-                entity.Property(e => e.DeleteAt)
-                    .HasColumnType("datetime")
-                    .HasColumnName("deleteAt");
+                entity.Property(e => e.CreateAt).HasColumnType("date");
+
+                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(2500);
 
+                entity.Property(e => e.DescriptionDetails).HasMaxLength(2500);
+
                 entity.Property(e => e.District).HasMaxLength(255);
+
+                entity.Property(e => e.Latitude)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Longitude)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("money");
 

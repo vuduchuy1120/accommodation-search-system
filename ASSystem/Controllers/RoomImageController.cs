@@ -15,10 +15,10 @@ namespace ASSystem.Controllers
             _roomImagesServices = roomImagesServices;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoomImage(int id)
+        [HttpDelete("{motelId}/{id}")]
+        public async Task<IActionResult> DeleteRoomImage(int motelId, int id)
         {
-            var result = await _roomImagesServices.DeleteRoomImage(id);
+            var result = await _roomImagesServices.DeleteRoomImage(motelId, id);
             if (result.Success)
             {
                 return Ok(result);

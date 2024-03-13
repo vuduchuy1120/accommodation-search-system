@@ -26,7 +26,8 @@ namespace ASSystemClient.Controllers
             if (!int.TryParse(roleId, out roleIdValue))
             {
                 // Xử lý trường hợp không thể chuyển đổi thành công
-                return RedirectToAction("Index", new { Message = "Invalid roleId!" });
+
+                return RedirectToAction("Index", new { Message = "Invalid roleId!" + roleId + "alo" });
             }
             var user = new UserRegisterDto
             {
@@ -44,7 +45,7 @@ namespace ASSystemClient.Controllers
                     {
                         if (response.IsSuccessStatusCode)
                         {
-                            return RedirectToAction("Index", new { Message = "Register successfully!" });
+                            return RedirectToAction("Index", "Login");
                         }
                         else
                         {

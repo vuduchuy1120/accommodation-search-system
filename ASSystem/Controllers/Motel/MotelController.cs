@@ -95,7 +95,7 @@ namespace ASSystem.Controllers.Motel
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMotel(int id, [FromForm] string motelJson , IFormFile[] images)
+        public async Task<IActionResult> UpdateMotel(int id, [FromForm] string motelJson, IFormFile[] images)
         {
             var motel = JsonConvert.DeserializeObject<ASSystem.Models.Motel>(motelJson);
 
@@ -113,6 +113,34 @@ namespace ASSystem.Controllers.Motel
             return BadRequest(result);
         }
 
-   
+
+        [HttpGet("GetMotelByAccountId/{accountId}")]
+        public async Task<IActionResult> GetMotelByAccountId(int accountId)
+        {
+            var result = await _motelServices.GetMotelByAccountId(accountId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("SearchMotel")]
+        public async Task<IActionResult> SearchMotel(
+            [FromQuery(Name = "province")] string? province,
+            [FromQuery(Name = "district")] string? district,
+            [FromQuery(Name = "ward")] string? ward,
+            [FromQuery(Name = "price")] Decimal? price,
+            [FromQuery(Name = "area")] double? area,
+            [FromQuery(Name = "title")] string? title)
+         {
+            var result = await _motelServices.SearchMotel(province, district, ward, price, area, title);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

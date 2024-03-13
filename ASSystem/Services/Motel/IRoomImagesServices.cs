@@ -4,6 +4,6 @@ namespace ASSystem.Services.Motel
 {
     public interface IRoomImagesServices
     {
-        public Task<ApiResponse<RoomImageDto>> DeleteRoomImage(int id);
+        public Task<ApiResponse<RoomImageDto>> DeleteRoomImage(int motelId,int id);
     }
 }

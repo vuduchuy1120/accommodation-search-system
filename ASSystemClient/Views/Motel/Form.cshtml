@@ -87,10 +87,30 @@
                 <div class="row">
                     <div class="col">
                         <div class="mb-1">
+                            <label for="description" class="form-label">Description Details</label>
+                            <textarea style="border: 1px solid #dee2e6;" class="form-control"
+                                      name="descriptionDetails" id="descriptionDetails" placeholder="Description">@Model.DescriptionDetails</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
+                            <label for="address" class="form-label">Area (m²)</label>
+                            <input style="border: 1px solid #dee2e6;" type="text"
+                                   value="@Model.Area"
+                                   class="form-control" name="area" id="area" placeholder="Example: 25">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-1">
                             <label for="address" class="form-label">Address</label>
                             <input style="border: 1px solid #dee2e6;" type="text"
-                                value="@Model.Address"
-                                class="form-control" name="address" id="address" placeholder="Address">
+                                   value="@Model.Address"
+                                   class="form-control" name="address" id="address" placeholder="Address">
                         </div>
                     </div>
                 </div>
@@ -99,7 +119,7 @@
                         <div class="mb-1">
                             <label for="price" class="form-label">Price</label>
                             <input style="border: 1px solid #dee2e6;" type="text"
-                                   value="@Model.Price"
+                                   value="@Model.Price.Value.ToString("#0.0")"
                                    class="form-control" name="price" id="price" placeholder="Price">
                         </div>
                     </div>
@@ -109,8 +129,8 @@
                         <div class="mb-1">
                             <label for="quantityEmptyRooms" class="form-label">QuantityEmptyRooms</label>
                             <input style="border: 1px solid #dee2e6;"
-                                value="@Model.QuantityEmptyRooms"
-                                type="text" class="form-control" name="quantityEmptyRooms" id="quantityEmptyRooms" placeholder="QuantityEmptyRooms">
+                                   value="@Model.QuantityEmptyRooms"
+                                   type="text" class="form-control" name="quantityEmptyRooms" id="quantityEmptyRooms" placeholder="QuantityEmptyRooms">
                         </div>
                     </div>
                 </div>
@@ -185,7 +205,7 @@
 
 <script>
     const getId = (id) => {
-        fetch('https://localhost:7280/api/RoomImage/' + id, {
+        fetch('https://localhost:7280/api/RoomImage/' + @Model.MotelId + "/" + id, {
             method: 'DELETE'
         })
             .then(response => {
@@ -205,10 +225,6 @@
             });
     }
 
-    
-    
-    //fetch
-    // Fetch provinces
     fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://vnprovinces.pythonanywhere.com/api/provinces/?limit=100', {
         mode: 'no-cors'
     }))
@@ -225,10 +241,6 @@
                 option.value = province.id;
                 provinceSelect.appendChild(option);
             });
-
-
-            // Trigger change event to fetch districts and wards based on the initial province
-            provinceSelect.dispatchEvent(new Event('change'));
 
             // Add event listener to province select element
             provinceSelect.addEventListener('change', function () {
@@ -253,7 +265,6 @@
                             option.value = district.id;
                             districtSelect.appendChild(option);
                         });
-
                         districtSelect.addEventListener('change', function () {
                             var selectedDistrictId = this.value;
                             console.log(selectedDistrictId);
@@ -276,7 +287,6 @@
                                         option.value = ward.id;
                                         wardSelect.appendChild(option);
                                     });
-
                                 })
                                 .catch(error => console.error(error));
                         });
@@ -285,7 +295,6 @@
             });
         })
         .catch(error => console.error(error));
-
     const Update = () => {
         event.preventDefault(); // Prevent the default form submission behavior
 
@@ -298,6 +307,8 @@
         var province = document.getElementById("province").value;
         var district = document.getElementById("district").value;
         var ward = document.getElementById("ward").value;
+        var area = document.getElementById("area").value;
+        var descriptionDetails = document.getElementById("descriptionDetails").value;
         var images = document.getElementById("images").files;
         // var accountId = document.getElementById("accountId").value;
         var accountId = 4;
@@ -306,6 +317,8 @@
             tittle: title,
             description: description,
             address: address,
+            area: area,
+            descriptionDetails: descriptionDetails,
             price: price,
             quantityEmptyRooms: quantityEmptyRooms,
             contact: contact,
@@ -329,6 +342,7 @@
             })
             .then(data => {
                 console.log(data);
+                location.href = "https://localhost:7101/Motel";
                 // You might want to handle success here, maybe redirect to a success page or show a success message
             })
             .catch(error => {

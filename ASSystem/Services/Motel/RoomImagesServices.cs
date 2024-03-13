@@ -11,9 +11,9 @@ namespace ASSystem.Services.Motel
         {
             _roomImagesRepository = roomImagesRepository;
         }
-        public async Task<ApiResponse<RoomImageDto>> DeleteRoomImage(int id)
+        public async Task<ApiResponse<RoomImageDto>> DeleteRoomImage(int motelId, int id)
         {
-            var result = await _roomImagesRepository.DeleteImages(id);
+            var result = await _roomImagesRepository.DeleteImages(motelId, id);
             if (!result)
             {
                 throw new Exception("Delete failed");

@@ -37,6 +37,62 @@
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-ZyIfGNr5iZ1gSOnM6C0f+XWq7qRw/ehm6+r3zr6bocpdzqC7n13Mx1q6qFtRl9s7" crossorigin="anonymous">
+    <div>
+        <form method="get" class="text-center" action="/Motel/SearchMotel" style="margin-bottom:20px">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-1">
+                        <label for="province" class="form-label">Province</label>
+                        <select class="form-control" id="province" name="province">
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-1">
+                        <label for="district" class="form-label">District</label>
+                        <select class="form-control" id="district" name="district">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-1">
+                        <label for="ward" class="form-label">Ward</label>
+                        <select class="form-control" id="ward" name="ward">
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-1">
+                        <label for="area" class="form-label">Diện tích</label>
+                        <input class="form-control" id="area" name="area" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-1">
+                        <label for="price" class="form-label">Price</label>
+                        <input class="form-control" id="price" name="price" />
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row d-flex">
+                <div class="col">
+                </div>
+                <div class="col">
+                    <input class="form-control justify-content-end" placeholder="Nhập tên trọ bạn muốn tìm kiếm ..." name="title" style="width:300px" />
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="submit" style="height:100%;width:90px">Search</button>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </form>
+    </div>
+
+
     <section style="background-color: #eee;">
         <div class="container py-5">
             @foreach (var item in Model)
@@ -50,14 +106,9 @@
                                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
                                             <img src="https://localhost:7280/api/Motel@(item.RoomImages[0].PathImageDetail)"
                                                  class="w-100" />
-                                            <a href="/Motel/Details?id=@item.MotelId">
-                                                <div class="hover-overlay">
-                                                    <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);">CLick me</div>
-                                                </div>
-                                            </a>
                                             <a href="/Motel/Form?id=@item.MotelId">
                                                 <div class="hover-overlay">
-                                                    <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);">Update me</div>
+                                                    <div class="mask" hidden style="background-color: rgba(253, 253, 253, 0.15);">Update me</div>
                                                 </div>
                                             </a>
                                         </div>
@@ -71,49 +122,42 @@
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
                                             </div>
-                                            <span style="color:red; font-weight:bold">@item.Price?.ToString("0.##") triệu/tháng • 25m²</span>
+                                            <span style="color:red; font-weight:bold">@item.Price?.ToString("0.##") triệu/tháng </span>
                                         </div>
                                         <div class="mt-1 mb-0 text-muted small">
-                                            <img src="./location.png" style='height:24px; width:auto'></img>
-                                            <span>  @item.Address,@item.Ward, @item.District, @item.Province</span>
+                                            <img src="../location.png" style='height:24px; width:auto'></img>
+                                            <span>  @item.Address</span>
                                         </div>
-                                        <!--<div class="mb-2 text-muted small">
-                                            <span>Unique design</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>For men</span>
-                                            <span class="text-primary"> • </span>
-                                            <span>Casual<br /></span>
-                                        </div>-->
-                                        <p class="text-truncate1 mb-4 mb-md-0">
+                                        <p class="text-truncate mb-4 mb-md-0">
                                             @item.Description
                                         </p>
                                     </div>
-                                    <!--  <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
-                                          <div class="d-flex flex-row align-items-center mb-1">
-                                              <h4 class="mb-1 me-1">$13.99</h4>
-                                              <span class="text-danger"><s>$20.99</s></span>
-                                          </div>
-                                          <h6 class="text-success">Free shipping</h6>
-                                          <div class="d-flex flex-column mt-4">
-                                              <button class="btn btn-primary btn-sm" type="button">Details</button>
-                                              <button class="btn btn-outline-primary btn-sm mt-2" type="button">
-                                                  Add to wishlist
-                                              </button>
-                                          </div>
-                                      </div> -->
+                                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                                        <div class="d-flex flex-row align-items-center mb-1">
+                                            <h4 class="mb-1 me-1"><img src="../vnd.png" style="width:30px ; height:auto"></h4>
+                                            <span class="text-danger " style="color:red; font-weight:bold">@($"{item.Price.Value * 1000000:N0}")</span>
+                                        </div>
+                                        <h6 class="text-success">Diện tích:  @(item.Area)m²</h6>
+                                        <div class="d-flex flex-column mt-4">
+                                            <a href="/Motel/Details?id=@item.MotelId" class="btn btn-primary btn-sm" type="button">Details</a>
+                                            <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                                                Add to wishlist
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <hr />
                                 <div class="row" style="margin:10px">
                                     <div class="col d-flex justify-content-between flex-column">
                                         <div class="row">
-                                            <span class="name">Vu Duc Huy</span>
+                                            <span><img src="../home.png" style="width:30px;height:auto" /><span class="name" id="displayName-@item.AccountId"> @item.AccountId</span></span>
                                         </div>
                                         <div class="row mt-2">
-                                            <span class="date">Ngày đăng bài</span>
+                                            <span class="date">Published: @item.CreateAt.Value.ToString("dd/MM/yyyy")</span>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <button class="contact-btn float-end">Liên hệ</button>
+                                        <span class="float-end"><img style="width:30px; height:auto" src="../call.png" /> Liên hệ: @item.Contact  </span>
                                     </div>
                                 </div>
                             </div>
@@ -124,5 +168,143 @@
 
         </div>
     </section>
+    <script>
+        function getUserById(id) {
+            return fetch('https://localhost:7280/api/Admin/GetUserById?id=' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error: ' + response.status);
+                    }
+                });
+        }
+
+        var displayNameElements = document.querySelectorAll('[id^="displayName-"]');
+        displayNameElements.forEach(element => {
+            var id = element.id.split('-')[1];
+            getUserById(id)
+                .then(data => {
+                    console.log(data);
+                    element.innerHTML = " " +data.data.firstName + " " + data.data.lastName;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        });
+
+        function fetchProvinces() {
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://vnprovinces.pythonanywhere.com/api/provinces/?limit=100', {
+                mode: 'no-cors'
+            }))
+                .then(response => response.json())
+                .then(data => {
+                    const provinces = JSON.parse(data.contents).results;
+
+                    const provinceSelect = document.getElementById("province");
+                    provinceSelect.innerHTML = "";
+
+                    const defaultProvinceOption = document.createElement("option");
+                    defaultProvinceOption.text = "--Vui lòng chọn tỉnh--";
+                    defaultProvinceOption.value = "";
+                    provinceSelect.appendChild(defaultProvinceOption);
+
+                    provinces.forEach(province => {
+                        const option = document.createElement("option");
+                        option.text = province.name;
+                        option.value = province.id;
+                        provinceSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        function fetchDistricts(provinceId) {
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://vnprovinces.pythonanywhere.com/api/provinces/' + provinceId, {
+                mode: 'no-cors'
+            }))
+                .then(response => response.json())
+                .then(data => {
+                    const districts = JSON.parse(data.contents).districts;
+
+                    const districtSelect = document.getElementById("district");
+                    districtSelect.innerHTML = "";
+
+                    const defaultDistrictOption = document.createElement("option");
+                    defaultDistrictOption.text = "-- Vui lòng chọn huyện--";
+                    defaultDistrictOption.value = "";
+                    districtSelect.appendChild(defaultDistrictOption);
+
+                    districts.forEach(district => {
+                        const option = document.createElement("option");
+                        option.text = district.name;
+                        option.value = district.id;
+                        districtSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        function fetchWards(provinceId, districtId) {
+            fetch(`https://vnprovinces.pythonanywhere.com/api/wards/?province_id=${provinceId}&district_id=${districtId}&limit=100`, {
+                mode: 'cors'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const wards = data.results;
+
+                    const wardSelect = document.getElementById("ward");
+                    wardSelect.innerHTML = "";
+
+                    const defaultWardOption = document.createElement("option");
+                    defaultWardOption.text = "...";
+                    defaultWardOption.value = "";
+                    wardSelect.appendChild(defaultWardOption);
+
+                    wards.forEach(ward => {
+                        const option = document.createElement("option");
+                        option.text = ward.name;
+                        option.value = ward.id;
+                        wardSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        fetchProvinces();
+
+        const provinceSelect = document.getElementById("province");
+        provinceSelect.addEventListener('change', function () {
+            const selectedProvinceId = this.value;
+
+            if (selectedProvinceId) {
+                fetchDistricts(selectedProvinceId);
+            } else {
+                const districtSelect = document.getElementById("district");
+                districtSelect.innerHTML = "";
+
+                const wardSelect = document.getElementById("ward");
+                wardSelect.innerHTML = "";
+            }
+        });
+
+        const districtSelect = document.getElementById("district");
+        districtSelect.addEventListener('change', function () {
+            const selectedDistrictId = this.value;
+
+            if (selectedDistrictId) {
+                fetchWards(selectedProvinceId, selectedDistrictId);
+            } else {
+                const wardSelect = document.getElementById("ward");
+                wardSelect.innerHTML = "";
+            }
+        });
+
+    </script>
 
 }

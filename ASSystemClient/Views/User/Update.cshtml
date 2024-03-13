@@ -1,0 +1,148 @@
+﻿@using ASSystem.Dtos.User
+@model UserDto
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <input hidden value="@Model.AccountId" id="accountId"/>
+                <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                <span class="font-weight-bold">@Model.FirstName   @Model.LastName</span><span class="text-black-50">@Model.Email</span><span> </span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <form>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="labels">First Name</label><input type="text" id="firstName" class="form-control" placeholder="first name" value="@Model.FirstName">
+                            <span hidden id="errFirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Last Name</label><input type="text" id="lastName" class="form-control" value="@Model.LastName" placeholder="LastName">
+                            <span hidden id="errLastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Mobile Number</label>
+                            <input type="text" class="form-control" id="phone" placeholder="enter phone number" value="@Model.Phone">
+                            <span hidden id="errPhone" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 mt-3"><label class="labels">Email</label><input type="text" class="form-control" readonly value="@Model.Email"></div>
+
+                        <div class="col-md-12 mt-3"><label class="labels">Address</label><input type="text" class="form-control" id="address" placeholder="Enter your address" value="@Model.Address"></div>
+
+
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" onclick="UpdateProfile()" type="button">Save Profile </button></div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience">
+                    <h4 class="text-right">Changes Password</h4>
+                </div><br>
+                <form>
+                    <div class="col-md-12">
+                        <label class="labels">Old Password</label><input type="password" class="form-control" id="oldPassword" placeholder="Enter old password" value="">
+                        <span hidden id="errOldPassWord" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">New Password</label><input type="password" class="form-control" id="newPassword" placeholder="Enter new password" value="">
+                        <span hidden id="errNewPassword" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="labels">Confirm New Password</label><input type="password" class="form-control" id="confirmPassword" placeholder="Enter confirm new password" value="">
+                        <span hidden id="errConfirmPassWord" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-5"><button class="btn btn-primary profile-button" onclick="changePassword()" type="button">Change password </button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function UpdateProfile() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
+
+        var accountId = document.getElementById("accountId").value;
+        fetch('https://localhost:7280/api/User/UpdateUserByID?id=' + accountId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "firstName": firstName,
+                "lastName": lastName,
+                "phone": phone,
+                "address": address
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    //display error message
+                    var err = document.getElementById("errPhone");
+                    err.innerHTML = "Phone number is aldreay exist!";
+                    err.hidden = false;
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                alert("Profile Updated");
+                location.reload();
+            });
+    };
+    function changePassword() {
+        var oldPassword = document.getElementById("oldPassword").value;
+        var newPassword = document.getElementById("newPassword").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        if (newPassword != confirmPassword) {
+            var err = document.getElementById("errConfirmPassWord");
+            err.innerHTML = "Confirm password is incorrect!";
+            err.hidden = false;
+            return;
+        }
+
+        var accountId = document.getElementById("accountId").value;
+        fetch('https://localhost:7280/api/User/ChangePassword?id=' + accountId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "oldPassword": oldPassword,
+                "password": newPassword
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    //display error message
+                    var err = document.getElementById("errOldPassWord");
+                    err.innerHTML = "Old password is incorrect!";
+                    err.hidden = false;
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                alert("Password Changed");
+                location.reload();
+            });
+    }
+
+
+</script>

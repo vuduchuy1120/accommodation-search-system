@@ -68,12 +68,10 @@ namespace ASSystemClient.Controllers
                                 authProperties
                             );
 
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Motel");
                         }
 
-                        var errorResponseJson = await response.Content.ReadAsStringAsync();
-                        var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorResponseJson);
-                        return RedirectToAction("Index", new { Message = errorResponse.Message });
+                        return RedirectToAction("Index", new { Message = "Username or password is incorrect" });
                     }
 
                 }
@@ -92,7 +90,7 @@ namespace ASSystemClient.Controllers
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Login");
         }
     }
 }
